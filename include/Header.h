@@ -6,6 +6,4 @@
 #include <limits>
 #include <memory>
 
-using namespace std;
-
 #endif /* HEADER_H */
