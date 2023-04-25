@@ -10,7 +10,7 @@ namespace ContactList
 	class App
 	{
 	private:
-		User *pCurrent = nullptr;
+		std::shared_ptr<User> pCurrent;
 		sqlite3 *m_sql_cnn;
 		sqlite3_stmt *m_sql_stmt;
 		std::string m_sql;

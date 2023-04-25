@@ -277,7 +277,7 @@ namespace ContactList
 			userName = (const char *)sqlite3_column_text(m_sql_stmt, 1);
 			userPass = (const char *)sqlite3_column_text(m_sql_stmt, 2);
 
-			pCurrent = new User();
+			pCurrent = std::make_shared<User>();
 			pCurrent->setUserId(userId);
 			pCurrent->setUserName(userName);
 			pCurrent->setUserPass(userPass);
@@ -498,10 +498,6 @@ namespace ContactList
 
 	App::~App()
 	{
-		if (pCurrent != nullptr)
-		{
-			delete pCurrent;
-		}
 		sqlite3_finalize(m_sql_stmt);
 		sqlite3_close(m_sql_cnn);
 	}
