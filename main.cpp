@@ -1,14 +1,10 @@
 #include "App.h"
 
-using namespace ContactList;
+int main(int argc, char const *argv[])
+{
+	std::shared_ptr<ContactList::App> app(new ContactList::App());
 
-int main() {
-
-	App *pContactListe = new App();
-
-	pContactListe->run();
-
-	delete pContactListe;
+	app->run();
 
 	return 0;
 }
