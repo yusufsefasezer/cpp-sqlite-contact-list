@@ -11,4 +11,4 @@ A simple contact list application developed with Modern C++ and SQLite.
 # License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details
 
-Created by [Yusuf SEZER](http://www.yusufsezer.com)
+Created by [Yusuf Sezer](https://www.yusufsezer.com)
