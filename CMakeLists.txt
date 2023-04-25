@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -10,9 +10,8 @@ project(CppContactList VERSION 0.1
 											 LANGUAGES CXX)
 
 include_directories(include)
-include_directories(lib/sqlite3)
-
-add_subdirectory(lib/sqlite3)
+include_directories(${SQLite3_INCLUDE_DIRS})
+find_package(SQLite3 REQUIRED)
 
 set(SOURCES
 	main.cpp
@@ -24,7 +23,7 @@ set(SOURCES
 
 add_executable(CppContactList ${SOURCES})
 
-target_link_libraries(CppContactList sqlite3)
+target_link_libraries(CppContactList ${SQLite3_LIBRARIES})
 
 if (UNIX)
 	target_link_libraries(CppContactList pthread)
