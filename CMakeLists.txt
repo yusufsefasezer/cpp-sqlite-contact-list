@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-project(CppContactList)
+project(CppContactList VERSION 0.1
+											 DESCRIPTION "A simple contact list application developed with Modern C++ and SQLite."
+											 LANGUAGES CXX)
 
 include_directories(include)
 include_directories(lib/sqlite3)
