@@ -3,9 +3,11 @@
 
 #include "Header.h"
 
-namespace ContactList {
+namespace ContactList
+{
 
-	class User {
+	class User
+	{
 	private:
 		int m_userId;
 		string m_userName;
@@ -13,18 +15,18 @@ namespace ContactList {
 
 	public:
 		User() = default;
-		User(const User& orig) = delete;
+		User(const User &orig) = delete;
 
-		User(const int& t_userId, const string& t_userName, const string& t_userPass);
+		User(const int &t_userId, const string &t_userName, const string &t_userPass);
 
 		int getUserId() const;
-		void setUserId(const int& t_userId);
+		void setUserId(const int &t_userId);
 
 		string getUserName() const;
-		void setUserName(const string& t_userName);
+		void setUserName(const string &t_userName);
 
 		string getUserPass() const;
-		void setUserPass(const string& t_userPass);
+		void setUserPass(const string &t_userPass);
 
 		virtual ~User();
 	};

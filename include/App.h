@@ -4,9 +4,11 @@
 #include "User.h"
 #include <sqlite3.h>
 
-namespace ContactList {
+namespace ContactList
+{
 
-	class App {
+	class App
+	{
 	private:
 		User *pCurrent = nullptr;
 		sqlite3 *m_sql_cnn;
@@ -29,17 +31,16 @@ namespace ContactList {
 		void editContact();
 		void deleteContact();
 
-		int createMenu(const vector<string> &t_options);
+		int createMenu(const vector<string_view> &t_options);
 		void showMessage();
 		void clearScreen();
 
 	public:
 		App() = default;
-		App(const App& orig) = delete;
+		App(const App &orig) = delete;
 		void run();
 		virtual ~App();
 	};
 
 }
 #endif /* APP_H */
-

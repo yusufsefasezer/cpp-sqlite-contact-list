@@ -1,14 +1,18 @@
 #include "App.h"
 
-namespace ContactList {
+namespace ContactList
+{
 
-	int App::createMenu(const vector<string>& t_options) {
+	int App::createMenu(const vector<string_view> &t_options)
+	{
 		int choice = -1,
-						len = t_options.size();
+				len = t_options.size();
 
-		do {
+		do
+		{
 			cout << "### Menu ###" << endl;
-			for (int i = 0; i < len; i++) {
+			for (int i = 0; i < len; i++)
+			{
 				cout << (i + 1) << ". " << t_options[i] << endl;
 			}
 
@@ -17,7 +21,8 @@ namespace ContactList {
 			cin.ignore(std::numeric_limits<int>::max(), '\n');
 			cin.sync();
 
-			if (cin.fail()) {
+			if (cin.fail())
+			{
 				cin.clear();
 				cin.ignore(numeric_limits<int>::max(), '\n');
 				continue;
@@ -27,11 +32,13 @@ namespace ContactList {
 		return choice;
 	}
 
-	void App::showMessage() {
+	void App::showMessage()
+	{
 		int message_length = m_message.size();
 		char prev;
 
-		if (message_length == 0) {
+		if (message_length == 0)
+		{
 			return;
 		}
 
@@ -50,55 +57,62 @@ namespace ContactList {
 		m_message = "";
 	}
 
-	void App::clearScreen() {
+	void App::clearScreen()
+	{
 		system("cls||clear");
 	}
 
-	void App::run() {
+	void App::run()
+	{
 		this->createDatabase();
 
 		this->menu();
 	}
 
-	void App::menu() {
-		vector<string> menu_options{"Register", "Login", "Exit"};
+	void App::menu()
+	{
+		vector<string_view> menu_options{"Register", "Login", "Exit"};
 		int result = -1;
 
-		while (1) {
+		while (1)
+		{
 
 			result = this->createMenu(menu_options);
-			switch (result) {
-				case 1:
-					// Register
-					this->registerUser();
-					clearScreen();
-					showMessage();
-					break;
-				case 2:
-					// Lgoin
-					this->loginUser();
-					clearScreen();
-					showMessage();
-					if (this->pCurrent != nullptr) {
-						this->userMenu();
-					}
-					break;
-				case 3:
-					// Exit
-					pCurrent = nullptr;
-					return;
-					break;
-				default:
-					cout << "Please select correct option." << endl;
-					break;
+			switch (result)
+			{
+			case 1:
+				// Register
+				this->registerUser();
+				clearScreen();
+				showMessage();
+				break;
+			case 2:
+				// Lgoin
+				this->loginUser();
+				clearScreen();
+				showMessage();
+				if (this->pCurrent != nullptr)
+				{
+					this->userMenu();
+				}
+				break;
+			case 3:
+				// Exit
+				pCurrent = nullptr;
+				return;
+				break;
+			default:
+				cout << "Please select correct option." << endl;
+				break;
 			}
-
 		}
 	}
 
-	void App::createDatabase() {
+	void App::createDatabase()
+	{
 
-		if (sqlite3_open("contacts.db", &m_sql_cnn) != SQLITE_OK) {
+		if (sqlite3_open("contacts.db", &m_sql_cnn) != SQLITE_OK)
+		{
 			cerr << "Can't open database: " << sqlite3_errmsg(m_sql_cnn);
 			exit(EXIT_FAILURE);
 		}
@@ -107,17 +121,22 @@ namespace ContactList {
 		sqlite3_prepare_v2(m_sql_cnn, "SELECT name FROM sqlite_master WHERE type='table' AND name='USER';", -1, &m_sql_stmt, nullptr);
 		sqlite3_step(m_sql_stmt);
 
-		if (sqlite3_data_count(m_sql_stmt) != 1) {
+		if (sqlite3_data_count(m_sql_stmt) != 1)
+		{
 
 			sqlite3_prepare_v2(m_sql_cnn, "CREATE TABLE USER("
-							"userId INTEGER PRIMARY KEY AUTOINCREMENT, "
-							"userName TEXT NOT NULL UNIQUE, "
-							"userPass TEXT NOT NULL);", -1, &m_sql_stmt, nullptr);
+																		"userId INTEGER PRIMARY KEY AUTOINCREMENT, "
+																		"userName TEXT NOT NULL UNIQUE, "
+																		"userPass TEXT NOT NULL);",
+												 -1, &m_sql_stmt, nullptr);
 
-			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE) {
+			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE)
+			{
 				cerr << "SQL error: " << sqlite3_errmsg(m_sql_cnn);
 				exit(EXIT_FAILURE);
-			} else {
+			}
+			else
+			{
 				cout << "User table created successfully." << endl;
 			}
 		}
@@ -126,28 +145,34 @@ namespace ContactList {
 		sqlite3_prepare_v2(m_sql_cnn, "SELECT name FROM sqlite_master WHERE type='table' AND name='PERSON';", -1, &m_sql_stmt, nullptr);
 		sqlite3_step(m_sql_stmt);
 
-		if (sqlite3_data_count(m_sql_stmt) != 1) {
+		if (sqlite3_data_count(m_sql_stmt) != 1)
+		{
 
 			sqlite3_prepare_v2(m_sql_cnn, "CREATE TABLE PERSON("
-							"personId INTEGER PRIMARY KEY AUTOINCREMENT, "
-							"userId INTEGER NOT NULL, "
-							"firstName TEXT NOT NULL, "
-							"lastName TEXT NOT NULL, "
-							"phoneNumber TEXT NOT NULL, "
-							"emailAddress TEXT NOT NULL UNIQUE, "
-							"address TEXT NOT NULL, "
-							"note TEXT NOT NULL);", -1, &m_sql_stmt, nullptr);
+																		"personId INTEGER PRIMARY KEY AUTOINCREMENT, "
+																		"userId INTEGER NOT NULL, "
+																		"firstName TEXT NOT NULL, "
+																		"lastName TEXT NOT NULL, "
+																		"phoneNumber TEXT NOT NULL, "
+																		"emailAddress TEXT NOT NULL UNIQUE, "
+																		"address TEXT NOT NULL, "
+																		"note TEXT NOT NULL);",
+												 -1, &m_sql_stmt, nullptr);
 
-			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE) {
+			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE)
+			{
 				cerr << "SQL error: " << sqlite3_errmsg(m_sql_cnn);
 				exit(EXIT_FAILURE);
-			} else {
+			}
+			else
+			{
 				cout << "Person table created successfully." << endl;
 			}
 		}
 	}
 
-	void App::registerUser() {
+	void App::registerUser()
+	{
 		string userName = "";
 		string userPass = "";
 
@@ -162,62 +187,68 @@ namespace ContactList {
 		sqlite3_bind_text(m_sql_stmt, 1, userName.c_str(), userName.length(), SQLITE_TRANSIENT);
 		sqlite3_bind_text(m_sql_stmt, 2, userPass.c_str(), userPass.length(), SQLITE_TRANSIENT);
 
-		if (sqlite3_step(m_sql_stmt) != SQLITE_DONE) {
+		if (sqlite3_step(m_sql_stmt) != SQLITE_DONE)
+		{
 			m_message = "SQL error: ";
 			m_message += sqlite3_errmsg(m_sql_cnn);
-		} else {
+		}
+		else
+		{
 			m_message = "User registered successfully.";
 		}
 	}
 
-	void App::userMenu() {
-		vector<string> menu_options{"List", "Search", "Add New", "Edit", "Delete", "Exit"};
+	void App::userMenu()
+	{
+		vector<string_view> menu_options{"List", "Search", "Add New", "Edit", "Delete", "Exit"};
 		int result = -1;
 
-		while (1) {
+		while (1)
+		{
 
 			result = this->createMenu(menu_options);
-			switch (result) {
-				case 1:
-					// List
-					this->listContact();
-					break;
-				case 2:
-					// Search
-					this->searchContact();
-					break;
-				case 3:
-					// List
-					this->addContact();
-					clearScreen();
-					showMessage();
-					break;
-				case 4:
-					// Edit
-					this->editContact();
-					clearScreen();
-					showMessage();
-					break;
-				case 5:
-					// Delete
-					this->deleteContact();
-					clearScreen();
-					showMessage();
-					break;
-				case 6:
-					// Exit
-					pCurrent = nullptr;
-					return;
-					break;
-				default:
-					cout << "Please select correct option." << endl;
-					break;
+			switch (result)
+			{
+			case 1:
+				// List
+				this->listContact();
+				break;
+			case 2:
+				// Search
+				this->searchContact();
+				break;
+			case 3:
+				// List
+				this->addContact();
+				clearScreen();
+				showMessage();
+				break;
+			case 4:
+				// Edit
+				this->editContact();
+				clearScreen();
+				showMessage();
+				break;
+			case 5:
+				// Delete
+				this->deleteContact();
+				clearScreen();
+				showMessage();
+				break;
+			case 6:
+				// Exit
+				pCurrent = nullptr;
+				return;
+				break;
+			default:
+				cout << "Please select correct option." << endl;
+				break;
 			}
-
 		}
 	}
 
-	void App::loginUser() {
+	void App::loginUser()
+	{
 		string userName = "";
 		string userPass = "";
 
@@ -233,7 +264,8 @@ namespace ContactList {
 		sqlite3_bind_text(m_sql_stmt, 2, userPass.c_str(), userPass.length(), SQLITE_TRANSIENT);
 		sqlite3_step(m_sql_stmt);
 
-		if (sqlite3_column_int(m_sql_stmt, 0) == 1) {
+		if (sqlite3_column_int(m_sql_stmt, 0) == 1)
+		{
 
 			m_sql = "SELECT * FROM USER WHERE userName = ? AND userPass = ?";
 			sqlite3_prepare_v2(m_sql_cnn, m_sql.c_str(), -1, &m_sql_stmt, nullptr);
@@ -242,20 +274,22 @@ namespace ContactList {
 			sqlite3_step(m_sql_stmt);
 
 			int userId = sqlite3_column_int(m_sql_stmt, 0);
-			userName = (const char*) sqlite3_column_text(m_sql_stmt, 1);
-			userPass = (const char*) sqlite3_column_text(m_sql_stmt, 2);
+			userName = (const char *)sqlite3_column_text(m_sql_stmt, 1);
+			userPass = (const char *)sqlite3_column_text(m_sql_stmt, 2);
 
 			pCurrent = new User();
 			pCurrent->setUserId(userId);
 			pCurrent->setUserName(userName);
 			pCurrent->setUserPass(userPass);
-
-		} else {
+		}
+		else
+		{
 			m_message = "Username or password is wrong!";
 		}
 	}
 
-	void App::addContact() {
+	void App::addContact()
+	{
 		string firstName = "";
 		string lastName = "";
 		string phoneNumber = "";
@@ -292,15 +326,19 @@ namespace ContactList {
 		sqlite3_bind_text(m_sql_stmt, 6, address.c_str(), address.length(), SQLITE_TRANSIENT);
 		sqlite3_bind_text(m_sql_stmt, 7, note.c_str(), note.length(), SQLITE_TRANSIENT);
 
-		if (sqlite3_step(m_sql_stmt) != SQLITE_DONE) {
+		if (sqlite3_step(m_sql_stmt) != SQLITE_DONE)
+		{
 			m_message = "SQL error: ";
 			m_message += sqlite3_errmsg(m_sql_cnn);
-		} else {
+		}
+		else
+		{
 			m_message = "Person added successfully.";
 		}
 	}
 
-	void App::searchContact() {
+	void App::searchContact()
+	{
 		string userName = "";
 
 		cout << "User Name: ";
@@ -313,7 +351,8 @@ namespace ContactList {
 
 		clearScreen();
 
-		while (sqlite3_step(m_sql_stmt) == SQLITE_ROW) {
+		while (sqlite3_step(m_sql_stmt) == SQLITE_ROW)
+		{
 			cout << sqlite3_column_text(m_sql_stmt, 0) << " | ";
 			cout << sqlite3_column_text(m_sql_stmt, 2) << " | ";
 			cout << sqlite3_column_text(m_sql_stmt, 3) << " | ";
@@ -324,14 +363,16 @@ namespace ContactList {
 		}
 	}
 
-	void App::listContact() {
+	void App::listContact()
+	{
 		m_sql = "SELECT * FROM PERSON WHERE userId = ?";
 		sqlite3_prepare_v2(m_sql_cnn, m_sql.c_str(), -1, &m_sql_stmt, nullptr);
 		sqlite3_bind_int(m_sql_stmt, 1, pCurrent->getUserId());
 
 		clearScreen();
 
-		while (sqlite3_step(m_sql_stmt) == SQLITE_ROW) {
+		while (sqlite3_step(m_sql_stmt) == SQLITE_ROW)
+		{
 			cout << sqlite3_column_text(m_sql_stmt, 0) << " | ";
 			cout << sqlite3_column_text(m_sql_stmt, 2) << " | ";
 			cout << sqlite3_column_text(m_sql_stmt, 3) << " | ";
@@ -342,7 +383,8 @@ namespace ContactList {
 		}
 	}
 
-	void App::editContact() {
+	void App::editContact()
+	{
 		string personId = "";
 
 		cout << "Person ID: ";
@@ -354,7 +396,8 @@ namespace ContactList {
 		sqlite3_bind_int(m_sql_stmt, 2, pCurrent->getUserId());
 		sqlite3_step(m_sql_stmt);
 
-		if (sqlite3_column_int(m_sql_stmt, 0) == 1) {
+		if (sqlite3_column_int(m_sql_stmt, 0) == 1)
+		{
 
 			string firstName = "";
 			string lastName = "";
@@ -399,18 +442,24 @@ namespace ContactList {
 			sqlite3_bind_text(m_sql_stmt, 7, personId.c_str(), personId.length(), SQLITE_TRANSIENT);
 			sqlite3_bind_int(m_sql_stmt, 8, pCurrent->getUserId());
 
-			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE) {
+			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE)
+			{
 				m_message = "SQL error: ";
 				m_message += sqlite3_errmsg(m_sql_cnn);
-			} else {
+			}
+			else
+			{
 				m_message = "Person updated successfully.";
 			}
-		} else {
+		}
+		else
+		{
 			m_message = "No contacts found.";
 		}
 	}
 
-	void App::deleteContact() {
+	void App::deleteContact()
+	{
 		string personId = "";
 
 		cout << "Person ID: ";
@@ -423,27 +472,35 @@ namespace ContactList {
 		sqlite3_bind_int(m_sql_stmt, 2, pCurrent->getUserId());
 		sqlite3_step(m_sql_stmt);
 
-		if (sqlite3_column_int(m_sql_stmt, 0) == 1) {
+		if (sqlite3_column_int(m_sql_stmt, 0) == 1)
+		{
 
 			m_sql = "DELETE FROM PERSON WHERE personId = ? AND userId = ?";
 			sqlite3_prepare_v2(m_sql_cnn, m_sql.c_str(), -1, &m_sql_stmt, nullptr);
 			sqlite3_bind_text(m_sql_stmt, 1, personId.c_str(), personId.length(), SQLITE_TRANSIENT);
 			sqlite3_bind_int(m_sql_stmt, 2, pCurrent->getUserId());
 
-			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE) {
+			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE)
+			{
 				m_message = "SQL error: ";
 				m_message += sqlite3_errmsg(m_sql_cnn);
-			} else {
+			}
+			else
+			{
 				m_message = "Person deleted successfully.";
 			}
-		} else {
+		}
+		else
+		{
 			m_message = "No contacts found.";
 		}
 	}
 
-	App::~App() {
+	App::~App()
+	{
 
-		if (pCurrent != nullptr) {
+		if (pCurrent != nullptr)
+		{
 			delete pCurrent;
 		}
 		sqlite3_close(m_sql_cnn);
