@@ -3,28 +3,28 @@
 namespace ContactList
 {
 
-	int App::createMenu(const vector<string_view> &t_options)
+	int App::createMenu(const std::vector<std::string_view> &t_options)
 	{
 		int choice = -1,
 				len = t_options.size();
 
 		do
 		{
-			cout << "### Menu ###" << endl;
+			std::cout << "### Menu ###" << std::endl;
 			for (int i = 0; i < len; i++)
 			{
-				cout << (i + 1) << ". " << t_options[i] << endl;
+				std::cout << (i + 1) << ". " << t_options[i] << std::endl;
 			}
 
-			cout << "Enter your choice: ";
-			cin >> choice;
-			cin.ignore(std::numeric_limits<int>::max(), '\n');
-			cin.sync();
+			std::cout << "Enter your choice: ";
+			std::cin >> choice;
+			std::cin.ignore(std::numeric_limits<int>::max(), '\n');
+			std::cin.sync();
 
-			if (cin.fail())
+			if (std::cin.fail())
 			{
-				cin.clear();
-				cin.ignore(numeric_limits<int>::max(), '\n');
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<int>::max(), '\n');
 				continue;
 			}
 		} while (choice < 1 || choice > len);
@@ -42,17 +42,17 @@ namespace ContactList
 			return;
 		}
 
-		prev = cout.fill('/');
-		cout.width(message_length);
-		cout << "" << endl;
-		cout.fill(prev);
+		prev = std::cout.fill('/');
+		std::cout.width(message_length);
+		std::cout << "" << std::endl;
+		std::cout.fill(prev);
 
-		cout << m_message << endl;
+		std::cout << m_message << std::endl;
 
-		prev = cout.fill('\\');
-		cout.width(message_length);
-		cout << "" << endl;
-		cout.fill(prev);
+		prev = std::cout.fill('\\');
+		std::cout.width(message_length);
+		std::cout << "" << std::endl;
+		std::cout.fill(prev);
 
 		m_message = "";
 	}
@@ -71,7 +71,7 @@ namespace ContactList
 
 	void App::menu()
 	{
-		vector<string_view> menu_options{"Register", "Login", "Exit"};
+		std::vector<std::string_view> menu_options{"Register", "Login", "Exit"};
 		int result = -1;
 
 		while (1)
@@ -102,7 +102,7 @@ namespace ContactList
 				return;
 				break;
 			default:
-				cout << "Please select correct option." << endl;
+				std::cout << "Please select correct option." << std::endl;
 				break;
 			}
 		}
@@ -113,7 +113,7 @@ namespace ContactList
 
 		if (sqlite3_open("contacts.db", &m_sql_cnn) != SQLITE_OK)
 		{
-			cerr << "Can't open database: " << sqlite3_errmsg(m_sql_cnn);
+			std::cerr << "Can't open database: " << sqlite3_errmsg(m_sql_cnn);
 			exit(EXIT_FAILURE);
 		}
 
@@ -132,12 +132,12 @@ namespace ContactList
 
 			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE)
 			{
-				cerr << "SQL error: " << sqlite3_errmsg(m_sql_cnn);
+				std::cerr << "SQL error: " << sqlite3_errmsg(m_sql_cnn);
 				exit(EXIT_FAILURE);
 			}
 			else
 			{
-				cout << "User table created successfully." << endl;
+				std::cout << "User table created successfully." << std::endl;
 			}
 		}
 
@@ -161,26 +161,26 @@ namespace ContactList
 
 			if (sqlite3_step(m_sql_stmt) != SQLITE_DONE)
 			{
-				cerr << "SQL error: " << sqlite3_errmsg(m_sql_cnn);
+				std::cerr << "SQL error: " << sqlite3_errmsg(m_sql_cnn);
 				exit(EXIT_FAILURE);
 			}
 			else
 			{
-				cout << "Person table created successfully." << endl;
+				std::cout << "Person table created successfully." << std::endl;
 			}
 		}
 	}
 
 	void App::registerUser()
 	{
-		string userName = "";
-		string userPass = "";
+		std::string userName = "";
+		std::string userPass = "";
 
-		cout << "User Name: ";
-		getline(cin, userName);
+		std::cout << "User Name: ";
+		std::getline(std::cin, userName);
 
-		cout << "User Pass: ";
-		getline(cin, userPass);
+		std::cout << "User Pass: ";
+		std::getline(std::cin, userPass);
 
 		m_sql = "INSERT INTO USER (userId, userName, userPass) VALUES (NULL, ?, ?);";
 		sqlite3_prepare_v2(m_sql_cnn, m_sql.c_str(), -1, &m_sql_stmt, nullptr);
@@ -200,7 +200,7 @@ namespace ContactList
 
 	void App::userMenu()
 	{
-		vector<string_view> menu_options{"List", "Search", "Add New", "Edit", "Delete", "Exit"};
+		std::vector<std::string_view> menu_options{"List", "Search", "Add New", "Edit", "Delete", "Exit"};
 		int result = -1;
 
 		while (1)
@@ -241,7 +241,7 @@ namespace ContactList
 				return;
 				break;
 			default:
-				cout << "Please select correct option." << endl;
+				std::cout << "Please select correct option." << std::endl;
 				break;
 			}
 		}
@@ -249,14 +249,14 @@ namespace ContactList
 
 	void App::loginUser()
 	{
-		string userName = "";
-		string userPass = "";
+		std::string userName = "";
+		std::string userPass = "";
 
-		cout << "User Name: ";
-		getline(cin, userName);
+		std::cout << "User Name: ";
+		std::getline(std::cin, userName);
 
-		cout << "User Pass: ";
-		getline(cin, userPass);
+		std::cout << "User Pass: ";
+		std::getline(std::cin, userPass);
 
 		m_sql = "SELECT COUNT (userId) FROM USER WHERE userName = ? AND userPass = ?";
 		sqlite3_prepare_v2(m_sql_cnn, m_sql.c_str(), -1, &m_sql_stmt, nullptr);
@@ -290,30 +290,30 @@ namespace ContactList
 
 	void App::addContact()
 	{
-		string firstName = "";
-		string lastName = "";
-		string phoneNumber = "";
-		string emailAddress = "";
-		string address = "";
-		string note = "";
+		std::string firstName = "";
+		std::string lastName = "";
+		std::string phoneNumber = "";
+		std::string emailAddress = "";
+		std::string address = "";
+		std::string note = "";
 
-		cout << "First Name: ";
-		getline(cin, firstName);
+		std::cout << "First Name: ";
+		std::getline(std::cin, firstName);
 
-		cout << "Last Name: ";
-		getline(cin, lastName);
+		std::cout << "Last Name: ";
+		std::getline(std::cin, lastName);
 
-		cout << "Phone Number: ";
-		getline(cin, phoneNumber);
+		std::cout << "Phone Number: ";
+		std::getline(std::cin, phoneNumber);
 
-		cout << "Email Address: ";
-		getline(cin, emailAddress);
+		std::cout << "Email Address: ";
+		std::getline(std::cin, emailAddress);
 
-		cout << "Address: ";
-		getline(cin, address);
+		std::cout << "Address: ";
+		std::getline(std::cin, address);
 
-		cout << "Note: ";
-		getline(cin, note);
+		std::cout << "Note: ";
+		std::getline(std::cin, note);
 
 		m_sql = "INSERT INTO PERSON (personId, userId, firstName, lastName, phoneNumber, emailAddress, address, note) "
 						"VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);";
@@ -339,10 +339,10 @@ namespace ContactList
 
 	void App::searchContact()
 	{
-		string userName = "";
+		std::string userName = "";
 
-		cout << "User Name: ";
-		getline(cin, userName);
+		std::cout << "User Name: ";
+		std::getline(std::cin, userName);
 
 		m_sql = "SELECT * FROM PERSON WHERE userId = ? AND firstName LIKE ?";
 		sqlite3_prepare_v2(m_sql_cnn, m_sql.c_str(), -1, &m_sql_stmt, nullptr);
@@ -353,13 +353,13 @@ namespace ContactList
 
 		while (sqlite3_step(m_sql_stmt) == SQLITE_ROW)
 		{
-			cout << sqlite3_column_text(m_sql_stmt, 0) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 2) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 3) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 4) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 5) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 6) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 7) << endl;
+			std::cout << sqlite3_column_text(m_sql_stmt, 0) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 2) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 3) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 4) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 5) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 6) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 7) << std::endl;
 		}
 	}
 
@@ -373,22 +373,22 @@ namespace ContactList
 
 		while (sqlite3_step(m_sql_stmt) == SQLITE_ROW)
 		{
-			cout << sqlite3_column_text(m_sql_stmt, 0) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 2) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 3) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 4) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 5) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 6) << " | ";
-			cout << sqlite3_column_text(m_sql_stmt, 7) << endl;
+			std::cout << sqlite3_column_text(m_sql_stmt, 0) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 2) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 3) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 4) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 5) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 6) << " | ";
+			std::cout << sqlite3_column_text(m_sql_stmt, 7) << std::endl;
 		}
 	}
 
 	void App::editContact()
 	{
-		string personId = "";
+		std::string personId = "";
 
-		cout << "Person ID: ";
-		getline(cin, personId);
+		std::cout << "Person ID: ";
+		std::getline(std::cin, personId);
 
 		m_sql = "SELECT COUNT (personId) FROM PERSON WHERE personId = ? AND userId = ?";
 		sqlite3_prepare_v2(m_sql_cnn, m_sql.c_str(), -1, &m_sql_stmt, nullptr);
@@ -399,30 +399,30 @@ namespace ContactList
 		if (sqlite3_column_int(m_sql_stmt, 0) == 1)
 		{
 
-			string firstName = "";
-			string lastName = "";
-			string phoneNumber = "";
-			string emailAddress = "";
-			string address = "";
-			string note = "";
+			std::string firstName = "";
+			std::string lastName = "";
+			std::string phoneNumber = "";
+			std::string emailAddress = "";
+			std::string address = "";
+			std::string note = "";
 
-			cout << "First Name: ";
-			getline(cin, firstName);
+			std::cout << "First Name: ";
+			std::getline(std::cin, firstName);
 
-			cout << "Last Name: ";
-			getline(cin, lastName);
+			std::cout << "Last Name: ";
+			std::getline(std::cin, lastName);
 
-			cout << "Phone Number: ";
-			getline(cin, phoneNumber);
+			std::cout << "Phone Number: ";
+			std::getline(std::cin, phoneNumber);
 
-			cout << "Email Address: ";
-			getline(cin, emailAddress);
+			std::cout << "Email Address: ";
+			std::getline(std::cin, emailAddress);
 
-			cout << "Address: ";
-			getline(cin, address);
+			std::cout << "Address: ";
+			std::getline(std::cin, address);
 
-			cout << "Note: ";
-			getline(cin, note);
+			std::cout << "Note: ";
+			std::getline(std::cin, note);
 
 			m_sql = "UPDATE PERSON SET "
 							"firstName = ?, "
@@ -460,10 +460,10 @@ namespace ContactList
 
 	void App::deleteContact()
 	{
-		string personId = "";
+		std::string personId = "";
 
-		cout << "Person ID: ";
-		getline(cin, personId);
+		std::cout << "Person ID: ";
+		std::getline(std::cin, personId);
 
 		m_sql = "SELECT COUNT (personId) FROM PERSON WHERE personId = ? AND userId = ?";
 
@@ -498,11 +498,11 @@ namespace ContactList
 
 	App::~App()
 	{
-
 		if (pCurrent != nullptr)
 		{
 			delete pCurrent;
 		}
+		sqlite3_finalize(m_sql_stmt);
 		sqlite3_close(m_sql_cnn);
 	}
 

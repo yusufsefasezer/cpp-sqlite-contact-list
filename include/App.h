@@ -13,8 +13,8 @@ namespace ContactList
 		User *pCurrent = nullptr;
 		sqlite3 *m_sql_cnn;
 		sqlite3_stmt *m_sql_stmt;
-		string m_sql;
-		string m_message;
+		std::string m_sql;
+		std::string m_message;
 
 		void menu();
 		void createDatabase();
@@ -31,7 +31,7 @@ namespace ContactList
 		void editContact();
 		void deleteContact();
 
-		int createMenu(const vector<string_view> &t_options);
+		int createMenu(const std::vector<std::string_view> &t_options);
 		void showMessage();
 		void clearScreen();
 

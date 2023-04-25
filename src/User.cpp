@@ -3,9 +3,12 @@
 namespace ContactList
 {
 
-	User::User(const int &t_userId, const string &t_userName, const string &t_userPass) : m_userId(t_userId), m_userName(t_userName), m_userPass(t_userPass)
-	{
-	}
+	User::User(const int &t_userId,
+						 std::string_view t_userName,
+						 std::string_view t_userPass)
+			: m_userId(t_userId),
+				m_userName(t_userName),
+				m_userPass(t_userPass) {}
 
 	int User::getUserId() const
 	{
@@ -17,28 +20,26 @@ namespace ContactList
 		m_userId = t_userId;
 	}
 
-	string User::getUserName() const
+	std::string_view User::getUserName() const
 	{
 		return m_userName;
 	}
 
-	void User::setUserName(const string &t_userName)
+	void User::setUserName(std::string_view t_userName)
 	{
 		m_userName = t_userName;
 	}
 
-	string User::getUserPass() const
+	std::string_view User::getUserPass() const
 	{
 		return m_userPass;
 	}
 
-	void User::setUserPass(const string &t_userPass)
+	void User::setUserPass(std::string_view t_userPass)
 	{
 		m_userPass = t_userPass;
 	}
 
-	User::~User()
-	{
-	}
+	User::~User() {}
 
 }

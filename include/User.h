@@ -10,23 +10,23 @@ namespace ContactList
 	{
 	private:
 		int m_userId;
-		string m_userName;
-		string m_userPass;
+		std::string_view m_userName;
+		std::string_view m_userPass;
 
 	public:
 		User() = default;
 		User(const User &orig) = delete;
 
-		User(const int &t_userId, const string &t_userName, const string &t_userPass);
+		User(const int &t_userId, std::string_view t_userName, std::string_view t_userPass);
 
 		int getUserId() const;
 		void setUserId(const int &t_userId);
 
-		string getUserName() const;
-		void setUserName(const string &t_userName);
+		std::string_view getUserName() const;
+		void setUserName(std::string_view t_userName);
 
-		string getUserPass() const;
-		void setUserPass(const string &t_userPass);
+		std::string_view getUserPass() const;
+		void setUserPass(std::string_view t_userPass);
 
 		virtual ~User();
 	};
